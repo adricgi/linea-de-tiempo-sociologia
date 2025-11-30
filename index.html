@@ -31,63 +31,70 @@
             background-color: rgba(156, 163, 175, 0.5);
             border-radius: 20px;
         }
+        
+        /* Transición suave para el zoom */
+        #timeline-scaler {
+            transition: transform 0.3s ease-out;
+            transform-origin: center center;
+        }
     </style>
 </head>
-<body class="bg-slate-100 font-sans text-slate-800 flex flex-col min-h-screen">
+<body class="bg-slate-100 font-sans text-slate-800 flex flex-col min-h-screen overflow-hidden">
 
     <!-- HEADER -->
-    <header class="bg-slate-900 text-white py-6 shadow-2xl sticky top-0 z-40 border-b border-slate-700">
+    <header class="bg-slate-900 text-white py-4 shadow-2xl sticky top-0 z-40 border-b border-slate-700 flex-shrink-0">
         <div class="container mx-auto px-4 text-center">
-            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-amber-200 drop-shadow-sm">
+            <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-1 text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-amber-200 drop-shadow-sm">
                 Padres y Precursores de la Sociología
             </h1>
-            <p class="text-slate-400 text-sm md:text-base max-w-2xl mx-auto font-light">
+            <p class="text-slate-400 text-xs md:text-sm max-w-2xl mx-auto font-light">
                 Un recorrido cronológico desde la filosofía clásica hasta la sociología contemporánea
             </p>
         </div>
     </header>
 
     <!-- MAIN -->
-    <main class="flex-1 relative overflow-hidden flex flex-col justify-center py-4 w-full bg-slate-200">
+    <main class="flex-1 relative overflow-hidden flex flex-col justify-center w-full bg-slate-200">
         
-        <!-- Botones de Navegación -->
-        <button onclick="scrollTimeline('left')" class="absolute left-6 z-50 bg-white hover:bg-indigo-50 p-4 rounded-full shadow-2xl text-slate-800 transition-all hover:scale-110 border border-slate-300 cursor-pointer group">
+        <!-- Botones de Navegación (Fijos en pantalla) -->
+        <button onclick="scrollTimeline('left')" class="absolute left-4 z-50 bg-white hover:bg-indigo-50 p-3 rounded-full shadow-2xl text-slate-800 transition-all hover:scale-110 border border-slate-300 cursor-pointer group top-1/2 -translate-y-1/2">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-indigo-600"><path d="m15 18-6-6 6-6"/></svg>
         </button>
 
-        <button onclick="scrollTimeline('right')" class="absolute right-6 z-50 bg-white hover:bg-indigo-50 p-4 rounded-full shadow-2xl text-slate-800 transition-all hover:scale-110 border border-slate-300 cursor-pointer group">
+        <button onclick="scrollTimeline('right')" class="absolute right-4 z-50 bg-white hover:bg-indigo-50 p-3 rounded-full shadow-2xl text-slate-800 transition-all hover:scale-110 border border-slate-300 cursor-pointer group top-1/2 -translate-y-1/2">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-indigo-600"><path d="m9 18 6-6-6-6"/></svg>
         </button>
 
-        <!-- Área de Scroll -->
-        <!-- Altura ajustada a 1100px para acercar las tarjetas a la línea -->
-        <div id="timeline-container" class="overflow-x-auto hide-scrollbar px-24 flex items-center h-[1100px] relative scroll-smooth w-full">
+        <!-- Contenedor Escalable (Zoom Wrapper) -->
+        <div id="timeline-scaler" class="w-full h-full flex items-center justify-center">
             
-            <!-- Eje Central (Línea) - Grosor h-2 (8px) -->
-            <div class="absolute left-0 right-0 top-1/2 h-2 bg-slate-400 rounded-full min-w-[10000px] z-0 shadow-inner border-y border-slate-500"></div>
-
-            <!-- Wrapper de Tarjetas -->
-            <div id="cards-wrapper" class="flex min-w-max relative z-10 pl-10 pr-10 h-full">
-                <!-- JS insertará las tarjetas aquí -->
+            <!-- Área de Scroll -->
+            <div id="timeline-container" class="overflow-x-auto hide-scrollbar px-24 flex items-center h-[1000px] relative scroll-smooth w-full">
+                
+                <!-- Wrapper de Tarjetas -->
+                <div id="cards-wrapper" class="flex min-w-max relative z-10 pl-10 pr-10 h-full items-center">
+                    <!-- La línea central y tarjetas se inyectan aquí -->
+                </div>
             </div>
+
         </div>
 
-        <div class="text-center text-slate-500 text-xs mt-2 uppercase tracking-widest font-semibold opacity-70">
+        <div class="absolute bottom-2 left-0 right-0 text-center text-slate-500 text-[10px] uppercase tracking-widest font-semibold opacity-70 pointer-events-none">
             Desliza • Hover para reseña • Clic para voltear
         </div>
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-white border-t border-slate-300 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] py-8 relative z-30">
+    <footer class="bg-white border-t border-slate-300 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] py-4 relative z-30 flex-shrink-0">
         <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                 
                 <!-- Referencias -->
                 <div>
-                    <h3 class="text-lg font-bold text-slate-800 mb-3 border-b-2 border-slate-200 pb-1 inline-block">
+                    <h3 class="text-sm font-bold text-slate-800 mb-2 border-b-2 border-slate-200 pb-1 inline-block">
                         Referencias
                     </h3>
-                    <ul class="text-xs text-slate-600 space-y-1.5 font-mono leading-relaxed">
+                    <ul class="text-[10px] text-slate-600 space-y-1 font-mono leading-tight">
                         <li>Giddens, A. (1989). <i>Sociología</i>. Alianza Editorial.</li>
                         <li>González Anleo, J. (1991). <i>Para comprender la Sociología</i>. Editorial Verbo Divino.</li>
                         <li>Macionis, J. J. y Plummer, K. (2011). <i>Sociología</i> (4ª ed.). Pearson Educación.</li>
@@ -99,11 +106,11 @@
 
                 <!-- Autor -->
                 <div class="flex flex-col justify-center items-end text-right h-full">
-                    <div class="bg-indigo-50 p-6 rounded-2xl border border-indigo-100 shadow-lg transform transition hover:scale-105 duration-300">
-                        <p class="text-xs text-indigo-400 font-bold uppercase tracking-widest mb-2">Línea de tiempo elaborada por</p>
-                        <p class="text-2xl font-black text-slate-800 leading-none mb-1">Adriana González Ibarra</p>
-                        <div class="h-1 w-16 bg-indigo-500 ml-auto mb-2 rounded-full"></div>
-                        <p class="font-mono text-sm text-slate-500 font-medium">C.I. 15.756.922</p>
+                    <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 shadow-md transform transition hover:scale-105 duration-300">
+                        <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-widest mb-1">Línea de tiempo elaborada por</p>
+                        <p class="text-xl font-black text-slate-800 leading-none mb-1">Adriana Gonzalez Ibarra</p>
+                        <div class="h-1 w-12 bg-indigo-500 ml-auto mb-1 rounded-full"></div>
+                        <p class="font-mono text-xs text-slate-500 font-medium">C.I. 15.756.922</p>
                     </div>
                 </div>
             </div>
@@ -112,26 +119,21 @@
 
     <!-- LOGICA -->
     <script>
-        // --- CONFIGURACIÓN DE IMÁGENES ---
-
         // Fondos
         const bgGrecias = "https://www.cervantesvirtual.com/images/portales/antigua_historia_y_arqueologia/graf/grecia/imagen_parcial_de_la_acropolis_de_atenas.jpg";
         const bgFrancia = "https://artistsrep.org/wp-content/uploads/2019/05/FrenchRevolution.jpg";
         const bgIslam = "https://talkao.com/wp-content/uploads/2024/04/Taj-Mahal-Agra-India-1024x562.webp";
         const bgRenacimiento = "https://www.muyinteresante.com/wp-content/uploads/sites/5/2024/07/30/66a8efbb144de.jpeg?w=550&h=309&crop=1";
-        // const bgAlemania = "https://upload.wikimedia.org/wikipedia/commons/e/e0/Heidelberg%2C_seen_from_the_Terrace%2C_Germany%2C_1890s.jpg"; (Ya no se usa genérico)
         const bgKlemm = "https://www.brabbu.com/en/inspiration-and-ideas/wp-content/uploads/2017/04/Brandenburger_Tor_abends.jpg";
         const bgUK = "https://crowdbaron.com/wp-content/uploads/2020/10/images1302-5f9c580300d14.jpg";
         const bgGiddens = "https://media.istockphoto.com/id/499732346/photo/downtown-london-city-skyline-reflection-in-river-thames-at-night.jpg?s=612x612&w=0&k=20&c=8hwao3rwQe6JIcDuQPtcHr78J6sxpQvmJotQ1KO9ZdA=";
         const bgUSA = "https://www.sporcle.com/blog/wp-content/uploads/2020/03/5-5.jpg";
-        
-        // Nuevos Fondos Solicitados
         const bgMarx = "https://www.germansights.com/images/trier/trier-church.jpg";
         const bgMeiners = "https://static.dw.com/image/4335553_7.jpg";
         const bgWeber = "https://www.germansights.com/images/erfurt/erfurt_dom.jpg";
         const bgWaitz = "https://cms.thuecat.org/o/adaptive-media/image/166712964/Preview-1280x0/image";
 
-        // Imágenes de Perfil (URLs actualizadas desde Wordpress)
+        // Imágenes de Perfil
         const rawImages = {
             platon: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/1.-platon-c.-427-347-a.-c.png?w=242",
             aristoteles: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/2.-aristoteles-384-322-a.-c.png?w=201",
@@ -190,12 +192,20 @@
         ];
 
         const wrapper = document.getElementById('cards-wrapper');
+        const scaler = document.getElementById('timeline-scaler');
         
         // --- Parámetros de Diseño ---
         const cardWidth = 320; // 320px = w-80
         const overlap = cardWidth / 2; // Acercar mitad del ancho (160px)
         const initialSpacing = 400; // Espaciado anterior
         const step = initialSpacing - overlap; // Nuevo espaciado (240px)
+
+        // ** SOLUCIÓN DE LÍNEA CENTRAL ** // Creamos la línea dentro del wrapper y calculamos su ancho exacto
+        const totalWidth = (figures.length * step) + 400; // Ancho total del contenido
+        const timelineLine = document.createElement('div');
+        timelineLine.className = "absolute left-0 top-1/2 h-2 bg-slate-400 rounded-full z-0 shadow-inner border-y border-slate-500";
+        timelineLine.style.width = `${totalWidth}px`;
+        wrapper.appendChild(timelineLine); // La insertamos
 
         figures.forEach((fig, index) => {
             const isTop = index % 2 === 0;
@@ -209,33 +219,26 @@
 
             const typeLabel = fig.isSociologist ? "Sociólogo" : "Precursor";
 
+            // Altura tarjeta reducida a h-[420px]
             // Posición vertical (Ajustado para acercar láminas)
-            // Antes: top-4 / bottom-4. Ahora: top-12 / bottom-12 (más cerca del centro si el contenedor es alto)
-            // Con height 1100px:
-            // Centro ~ 550px.
-            // Tarjeta ~ 480px.
-            // Top: top-12 (48px) -> bottom edge @ 528px. (Casi toca el centro)
-            // Bottom: bottom-12 (48px) -> top edge @ 1100-48-480 = 572px. (Casi toca el centro)
-            const positionClass = isTop ? "top-12" : "bottom-12";
+            // top-10 / bottom-10
+            const positionClass = isTop ? "top-10" : "bottom-10";
             
-            // Conector Vertical: 
-            // Si Top: Bottom edge 528px. Linea hasta 550px. Longitud = 22px + gap.
-            // Si Bottom: Top edge 572px. Linea desde 550px. Longitud = 22px + gap.
-            // Ajustamos altura del conector para que cruce visualmente.
+            // Conector Vertical:
+            // Top: 40px + 420px = 460px bottom edge. Center ~500px. Gap 40px.
+            // Conector height ~60px
             const connectorHTML = isTop 
-                ? `<div class="absolute left-1/2 -translate-x-1/2 w-2 bg-slate-400 opacity-80 h-[80px] -bottom-[80px]"></div>
-                   <div class="absolute left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-slate-600 border-4 border-white connector-dot -bottom-[90px] z-20"></div>`
-                : `<div class="absolute left-1/2 -translate-x-1/2 w-2 bg-slate-400 opacity-80 h-[80px] -top-[80px]"></div>
-                   <div class="absolute left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-slate-600 border-4 border-white connector-dot -top-[90px] z-20"></div>`;
+                ? `<div class="absolute left-1/2 -translate-x-1/2 w-2 bg-slate-400 opacity-80 h-[60px] -bottom-[60px]"></div>
+                   <div class="absolute left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-slate-600 border-4 border-white connector-dot -bottom-[70px] z-20"></div>`
+                : `<div class="absolute left-1/2 -translate-x-1/2 w-2 bg-slate-400 opacity-80 h-[60px] -top-[60px]"></div>
+                   <div class="absolute left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-slate-600 border-4 border-white connector-dot -top-[70px] z-20"></div>`;
 
-            // Imagen - Usar directamente la URL
+            // Imagen
             const imgSrc = fig.imgUrl;
-            
-            // Condicional para alineación de imagen: Platón (id 1) se queda como está, el resto object-top
             const imgAlignClass = (fig.id === 1) ? "object-cover" : "object-cover object-top";
 
             const cardHTML = `
-                <div class="absolute ${positionClass} w-80 h-[480px] perspective-1000 z-20 group" style="left: ${index * step}px">
+                <div class="absolute ${positionClass} w-80 h-[420px] perspective-1000 z-20 group" style="left: ${index * step}px">
                     
                     ${connectorHTML}
 
@@ -246,42 +249,40 @@
                         <div class="absolute w-full h-full backface-hidden rounded-3xl overflow-hidden bg-white border border-slate-200 flex flex-col">
                             
                             <!-- Cabecera -->
-                            <div class="h-44 relative bg-cover bg-center" style="background-image: url('${fig.bgImg}');">
+                            <div class="h-40 relative bg-cover bg-center" style="background-image: url('${fig.bgImg}');">
                                 <div class="absolute inset-0 bg-black/30"></div>
-                                <div class="w-40 h-40 rounded-full border-4 border-white shadow-2xl bg-white absolute -bottom-20 left-1/2 -translate-x-1/2 overflow-hidden ring-4 ${ringClass} z-10">
+                                <div class="w-36 h-36 rounded-full border-4 border-white shadow-2xl bg-white absolute -bottom-16 left-1/2 -translate-x-1/2 overflow-hidden ring-4 ${ringClass} z-10">
                                     <img src="${imgSrc}" alt="${fig.name}" class="w-full h-full ${imgAlignClass}">
                                 </div>
                             </div>
 
                             <!-- Texto -->
-                            <div class="pt-24 px-4 pb-6 text-center flex-1 flex flex-col items-center justify-start mt-2">
-                                <h3 class="text-3xl font-extrabold text-slate-800 leading-none mb-2 tracking-tight">${fig.name}</h3>
-                                <span class="text-base font-bold text-slate-500 uppercase tracking-widest mb-3 block">${fig.dates}</span>
+                            <div class="pt-20 px-4 pb-6 text-center flex-1 flex flex-col items-center justify-start mt-2">
+                                <h3 class="text-2xl font-extrabold text-slate-800 leading-none mb-2 tracking-tight">${fig.name}</h3>
+                                <span class="text-sm font-bold text-slate-500 uppercase tracking-widest mb-3 block">${fig.dates}</span>
                                 <span class="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide bg-slate-100 ${textClass} mb-4 shadow-sm border border-slate-200">${typeLabel}</span>
                                 
                                 <div class="w-full mt-auto transition-all duration-500 max-h-0 opacity-0 group-hover:max-h-40 group-hover:opacity-100 overflow-hidden">
-                                    <p class="text-sm text-slate-700 leading-snug bg-slate-50 p-4 rounded-xl border border-slate-100 text-left shadow-inner font-medium">
+                                    <p class="text-xs text-slate-700 leading-snug bg-slate-50 p-4 rounded-xl border border-slate-100 text-left shadow-inner font-medium">
                                         ${fig.bio}
                                     </p>
                                 </div>
-                                <div class="mt-2 text-slate-300 group-hover:opacity-0 transition-opacity">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-                                </div>
+                                <!-- Icono eliminado -->
                             </div>
                         </div>
 
                         <!-- TRASERA -->
                         <div class="absolute w-full h-full backface-hidden rounded-3xl overflow-hidden ${lightBgClass} border-2 ${borderClass} flex flex-col rotate-y-180 shadow-inner">
-                            <div class="${accentClass} p-5 flex items-center justify-center text-white shadow-md flex-shrink-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                                <h4 class="font-bold text-lg tracking-wide">Contribuciones Principales</h4>
+                            <div class="${accentClass} p-4 flex items-center justify-center text-white shadow-md flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                                <h4 class="font-bold text-base tracking-wide">Contribuciones Principales</h4>
                             </div>
-                            <div class="p-6 flex-1 overflow-y-auto card-scroll">
+                            <div class="p-5 flex-1 overflow-y-auto card-scroll">
                                 <ul class="text-[13px] text-slate-800 space-y-3 text-left list-disc pl-4 font-medium leading-normal">
                                     ${fig.contributions.map(c => `<li>${c}</li>`).join('')}
                                 </ul>
                             </div>
-                            <div class="pb-4 pt-2 text-center text-xs text-slate-400 font-bold uppercase tracking-widest flex-shrink-0">
+                            <div class="pb-3 pt-2 text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest flex-shrink-0">
                                 Clic para volver
                             </div>
                         </div>
@@ -293,7 +294,7 @@
         });
 
         // Ajuste dinámico del ancho total del contenedor
-        wrapper.style.width = `${(figures.length * step) + 400}px`;
+        wrapper.style.width = `${totalWidth}px`;
 
         function scrollTimeline(direction) {
             const container = document.getElementById('timeline-container');
@@ -308,6 +309,35 @@
         function toggleFlip(element) {
             element.classList.toggle('rotate-y-180');
         }
+
+        // --- FUNCIÓN DE ZOOM AUTOMÁTICO ---
+        function adjustZoom() {
+            const viewportHeight = window.innerHeight;
+            const contentHeight = 1000; // Altura base del contenedor de timeline
+            const headerFooterHeight = 200; // Espacio aprox para header y footer
+            
+            // Calculamos el espacio disponible
+            const availableHeight = viewportHeight - headerFooterHeight;
+            
+            // Si el espacio disponible es menor que el contenido, calculamos la escala
+            let scale = 1;
+            
+            if (availableHeight < contentHeight) {
+                scale = availableHeight / contentHeight;
+                // Limitamos la escala mínima para que no sea ilegible (ej: 0.5)
+                scale = Math.max(scale, 0.5); 
+            }
+
+            // Aplicamos la escala al wrapper
+            if (scaler) {
+                scaler.style.transform = `scale(${scale})`;
+            }
+        }
+
+        // Ejecutar al inicio y al redimensionar
+        window.addEventListener('load', adjustZoom);
+        window.addEventListener('resize', adjustZoom);
+
     </script>
 </body>
 </html>
