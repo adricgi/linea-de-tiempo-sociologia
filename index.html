@@ -10,39 +10,31 @@
         .preserve-3d { transform-style: preserve-3d; }
         .backface-hidden { backface-visibility: hidden; }
         .rotate-y-180 { transform: rotateY(180deg); }
+        
+        /* Ocultar scrollbar predeterminada pero permitir scroll */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
         .card-inner { transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-        
-        /* Sombra de texto para legibilidad */
         .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
-        
-        /* Efecto de brillo en el conector */
         .connector-dot { box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8); }
 
-        /* Estilo personalizado para el scroll dentro de la tarjeta */
-        .card-scroll::-webkit-scrollbar {
-            width: 4px;
-        }
-        .card-scroll::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .card-scroll::-webkit-scrollbar-thumb {
-            background-color: rgba(156, 163, 175, 0.5);
-            border-radius: 20px;
-        }
+        /* Scroll personalizado dentro de tarjetas */
+        .card-scroll::-webkit-scrollbar { width: 4px; }
+        .card-scroll::-webkit-scrollbar-track { background: transparent; }
+        .card-scroll::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.5); border-radius: 20px; }
         
-        /* Transición suave para el zoom */
+        /* Configuración crítica para el zoom */
         #timeline-scaler {
-            transition: transform 0.3s ease-out;
-            transform-origin: center center;
+            transform-origin: top left; /* Fija el origen arriba a la izquierda */
+            transition: transform 0.3s ease-out, width 0.3s ease-out;
         }
     </style>
 </head>
-<body class="bg-slate-100 font-sans text-slate-800 flex flex-col min-h-screen overflow-hidden">
+<body class="bg-slate-100 font-sans text-slate-800 flex flex-col min-h-screen overflow-x-hidden">
 
     <!-- HEADER -->
-    <header class="bg-slate-900 text-white py-4 shadow-2xl sticky top-0 z-40 border-b border-slate-700 flex-shrink-0">
+    <header class="bg-slate-900 text-white py-4 shadow-2xl sticky top-0 z-50 border-b border-slate-700 flex-shrink-0">
         <div class="container mx-auto px-4 text-center">
             <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-1 text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-amber-200 drop-shadow-sm">
                 Padres y Precursores de la Sociología
@@ -54,38 +46,41 @@
     </header>
 
     <!-- MAIN -->
-    <main class="flex-1 relative overflow-hidden flex flex-col justify-center w-full bg-slate-200">
+    <main class="flex-1 relative w-full bg-slate-200 flex flex-col justify-center">
         
-        <!-- Botones de Navegación (Fijos en pantalla) -->
-        <button onclick="scrollTimeline('left')" class="absolute left-4 z-50 bg-white hover:bg-indigo-50 p-3 rounded-full shadow-2xl text-slate-800 transition-all hover:scale-110 border border-slate-300 cursor-pointer group top-1/2 -translate-y-1/2">
+        <!-- Botones de Navegación -->
+        <button onclick="scrollTimeline('left')" class="absolute left-4 z-40 bg-white hover:bg-indigo-50 p-3 rounded-full shadow-2xl text-slate-800 transition-all hover:scale-110 border border-slate-300 cursor-pointer group top-1/2 -translate-y-1/2">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-indigo-600"><path d="m15 18-6-6 6-6"/></svg>
         </button>
 
-        <button onclick="scrollTimeline('right')" class="absolute right-4 z-50 bg-white hover:bg-indigo-50 p-3 rounded-full shadow-2xl text-slate-800 transition-all hover:scale-110 border border-slate-300 cursor-pointer group top-1/2 -translate-y-1/2">
+        <button onclick="scrollTimeline('right')" class="absolute right-4 z-40 bg-white hover:bg-indigo-50 p-3 rounded-full shadow-2xl text-slate-800 transition-all hover:scale-110 border border-slate-300 cursor-pointer group top-1/2 -translate-y-1/2">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-indigo-600"><path d="m9 18 6-6-6-6"/></svg>
         </button>
 
-        <!-- Contenedor Escalable (Zoom Wrapper) -->
-        <div id="timeline-scaler" class="w-full h-full flex items-center justify-center">
+        <!-- Wrapper que ajustará su altura dinámicamente -->
+        <div id="timeline-wrapper" class="w-full relative overflow-hidden transition-all duration-300 ease-out">
             
-            <!-- Área de Scroll -->
-            <div id="timeline-container" class="overflow-x-auto hide-scrollbar px-24 flex items-center h-[1000px] relative scroll-smooth w-full">
+            <!-- Elemento que se escala (Zoom) -->
+            <div id="timeline-scaler" class="w-full">
                 
-                <!-- Wrapper de Tarjetas -->
-                <div id="cards-wrapper" class="flex min-w-max relative z-10 pl-10 pr-10 h-full items-center">
-                    <!-- La línea central y tarjetas se inyectan aquí -->
+                <!-- Área Scrollable (Mantiene su altura interna fija de diseño) -->
+                <div id="timeline-container" class="overflow-x-auto hide-scrollbar px-24 flex items-center h-[1000px] relative scroll-smooth">
+                    <!-- Cards Wrapper -->
+                    <div id="cards-wrapper" class="flex min-w-max relative z-10 pl-10 pr-10 h-full items-center">
+                        <!-- JS inyecta contenido aquí -->
+                    </div>
                 </div>
-            </div>
 
+            </div>
         </div>
 
-        <div class="absolute bottom-2 left-0 right-0 text-center text-slate-500 text-[10px] uppercase tracking-widest font-semibold opacity-70 pointer-events-none">
+        <div class="text-center text-slate-500 text-[10px] uppercase tracking-widest font-semibold opacity-70 py-2">
             Desliza • Hover para reseña • Clic para voltear
         </div>
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-white border-t border-slate-300 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] py-4 relative z-30 flex-shrink-0">
+    <footer class="bg-white border-t border-slate-300 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] py-4 relative z-50 flex-shrink-0">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                 
@@ -162,7 +157,6 @@
             giddens: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/25.-anthony-giddens-1938-presente.png?w=201"
         };
 
-        // Asignación de datos
         const figures = [
             { id: 1, name: "Platón", dates: "c. 427 - 347 a. C.", isSociologist: false, bgImg: bgGrecias, imgUrl: rawImages.platon, bio: "Filósofo griego que idealizó el Estado perfecto, buscando la justicia y la virtud más que el análisis empírico.", contributions: ["En La República, analizó la justicia como un equilibrio orgánico y planteó un modelo de sociedad estratificada (gobernantes, guerreros, productores) basado en la virtud.", "Defendió la educación estatal como mecanismo de control social y legitimación de la jerarquía, priorizando una visión idealista y estática del orden social sobre la observación empírica (Macionis y Plummer, 2011)."] },
             { id: 2, name: "Aristóteles", dates: "384 - 322 a. C.", isSociologist: false, bgImg: bgGrecias, imgUrl: rawImages.aristoteles, bio: "Discípulo de Platón, definió al hombre como un 'animal político' que necesita de la polis para realizarse.", contributions: ["Definió al ser humano como un 'animal político' (zoon politikon) que solo alcanza su plenitud en sociedad, considerando a la familia como la célula social básica.", "A diferencia de su maestro, aplicó un método comparativo y realista al estudiar 158 constituciones griegas, analizando la relación entre la estructura social, la economía y las formas de gobierno (González Anleo, 1991)."] },
@@ -193,19 +187,20 @@
 
         const wrapper = document.getElementById('cards-wrapper');
         const scaler = document.getElementById('timeline-scaler');
+        const timelineWrapper = document.getElementById('timeline-wrapper');
         
         // --- Parámetros de Diseño ---
-        const cardWidth = 320; // 320px = w-80
-        const overlap = cardWidth / 2; // Acercar mitad del ancho (160px)
-        const initialSpacing = 400; // Espaciado anterior
-        const step = initialSpacing - overlap; // Nuevo espaciado (240px)
+        const cardWidth = 320; 
+        const overlap = cardWidth / 2;
+        const initialSpacing = 400; 
+        const step = initialSpacing - overlap;
 
-        // ** SOLUCIÓN DE LÍNEA CENTRAL ** // Creamos la línea dentro del wrapper y calculamos su ancho exacto
-        const totalWidth = (figures.length * step) + 400; // Ancho total del contenido
+        // ** LÍNEA CENTRAL **
+        const totalWidth = (figures.length * step) + 400; 
         const timelineLine = document.createElement('div');
         timelineLine.className = "absolute left-0 top-1/2 h-2 bg-slate-400 rounded-full z-0 shadow-inner border-y border-slate-500";
         timelineLine.style.width = `${totalWidth}px`;
-        wrapper.appendChild(timelineLine); // La insertamos
+        wrapper.appendChild(timelineLine);
 
         figures.forEach((fig, index) => {
             const isTop = index % 2 === 0;
@@ -219,14 +214,10 @@
 
             const typeLabel = fig.isSociologist ? "Sociólogo" : "Precursor";
 
-            // Altura tarjeta reducida a h-[420px]
-            // Posición vertical (Ajustado para acercar láminas)
-            // top-10 / bottom-10
+            // Posición vertical
             const positionClass = isTop ? "top-10" : "bottom-10";
             
-            // Conector Vertical:
-            // Top: 40px + 420px = 460px bottom edge. Center ~500px. Gap 40px.
-            // Conector height ~60px
+            // Conector Vertical
             const connectorHTML = isTop 
                 ? `<div class="absolute left-1/2 -translate-x-1/2 w-2 bg-slate-400 opacity-80 h-[60px] -bottom-[60px]"></div>
                    <div class="absolute left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-slate-600 border-4 border-white connector-dot -bottom-[70px] z-20"></div>`
@@ -235,6 +226,7 @@
 
             // Imagen
             const imgSrc = fig.imgUrl;
+            // Platón imagen completa, el resto alineación superior
             const imgAlignClass = (fig.id === 1) ? "object-cover" : "object-cover object-top";
 
             const cardHTML = `
@@ -267,7 +259,6 @@
                                         ${fig.bio}
                                     </p>
                                 </div>
-                                <!-- Icono eliminado -->
                             </div>
                         </div>
 
@@ -293,7 +284,7 @@
             wrapper.innerHTML += cardHTML;
         });
 
-        // Ajuste dinámico del ancho total del contenedor
+        // Ajuste ancho contenedor
         wrapper.style.width = `${totalWidth}px`;
 
         function scrollTimeline(direction) {
@@ -310,31 +301,34 @@
             element.classList.toggle('rotate-y-180');
         }
 
-        // --- FUNCIÓN DE ZOOM AUTOMÁTICO ---
+        // --- LÓGICA DE ZOOM RESPONSIVE ---
         function adjustZoom() {
-            const viewportHeight = window.innerHeight;
-            const contentHeight = 1000; // Altura base del contenedor de timeline
-            const headerFooterHeight = 200; // Espacio aprox para header y footer
+            // Dimensiones fijas de diseño de la línea de tiempo
+            const contentBaseHeight = 1000; 
             
-            // Calculamos el espacio disponible
-            const availableHeight = viewportHeight - headerFooterHeight;
+            // Espacio disponible en pantalla (restamos cabecera y pie aprox)
+            const availableHeight = window.innerHeight - 180; // ~180px para header + footer margins
             
-            // Si el espacio disponible es menor que el contenido, calculamos la escala
+            // Calculamos factor de escala
             let scale = 1;
-            
-            if (availableHeight < contentHeight) {
-                scale = availableHeight / contentHeight;
-                // Limitamos la escala mínima para que no sea ilegible (ej: 0.5)
-                scale = Math.max(scale, 0.5); 
+            if (availableHeight < contentBaseHeight) {
+                scale = availableHeight / contentBaseHeight;
+                scale = Math.max(scale, 0.4); // Límite mínimo para no ser ilegible
             }
 
-            // Aplicamos la escala al wrapper
-            if (scaler) {
+            // Aplicar escala
+            if (scaler && timelineWrapper) {
                 scaler.style.transform = `scale(${scale})`;
+                
+                // TRUCO: Compensar el ancho para que al encogerse (scale < 1)
+                // el contenedor ocupe más % y visualmente llene la pantalla.
+                scaler.style.width = `${100 / scale}%`;
+                
+                // Ajustar altura del contenedor padre para que el footer suba
+                timelineWrapper.style.height = `${contentBaseHeight * scale}px`;
             }
         }
 
-        // Ejecutar al inicio y al redimensionar
         window.addEventListener('load', adjustZoom);
         window.addEventListener('resize', adjustZoom);
 
