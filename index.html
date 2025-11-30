@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Línea de Tiempo: Padres de la Sociología</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .perspective-1000 { perspective: 1000px; }
+        .preserve-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .card-inner { transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        /* Sombra de texto para legibilidad */
+        .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
+        
+        /* Efecto de brillo en el conector */
+        .connector-dot { box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8); }
+
+        /* Estilo personalizado para el scroll dentro de la tarjeta */
+        .card-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .card-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .card-scroll::-webkit-scrollbar-thumb {
+            background-color: rgba(156, 163, 175, 0.5);
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 font-sans text-slate-800 flex flex-col min-h-screen">
+
+    <!-- HEADER -->
+    <header class="bg-slate-900 text-white py-6 shadow-2xl sticky top-0 z-40 border-b border-slate-700">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-amber-200 drop-shadow-sm">
+                Padres y Precursores de la Sociología
+            </h1>
+            <p class="text-slate-400 text-sm md:text-base max-w-2xl mx-auto font-light">
+                Un recorrido cronológico desde la filosofía clásica hasta la sociología contemporánea
+            </p>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="flex-1 relative overflow-hidden flex flex-col justify-center py-4 w-full bg-slate-200">
+        
+        <!-- Botones de Navegación -->
+        <button onclick="scrollTimeline('left')" class="absolute left-6 z-50 bg-white hover:bg-indigo-50 p-4 rounded-full shadow-2xl text-slate-800 transition-all hover:scale-110 border border-slate-300 cursor-pointer group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-indigo-600"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+
+        <button onclick="scrollTimeline('right')" class="absolute right-6 z-50 bg-white hover:bg-indigo-50 p-4 rounded-full shadow-2xl text-slate-800 transition-all hover:scale-110 border border-slate-300 cursor-pointer group">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-indigo-600"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+
+        <!-- Área de Scroll -->
+        <!-- Altura ajustada a 1100px para acercar las tarjetas a la línea -->
+        <div id="timeline-container" class="overflow-x-auto hide-scrollbar px-24 flex items-center h-[1100px] relative scroll-smooth w-full">
+            
+            <!-- Eje Central (Línea) - Grosor h-2 (8px) -->
+            <div class="absolute left-0 right-0 top-1/2 h-2 bg-slate-400 rounded-full min-w-[10000px] z-0 shadow-inner border-y border-slate-500"></div>
+
+            <!-- Wrapper de Tarjetas -->
+            <div id="cards-wrapper" class="flex min-w-max relative z-10 pl-10 pr-10 h-full">
+                <!-- JS insertará las tarjetas aquí -->
+            </div>
+        </div>
+
+        <div class="text-center text-slate-500 text-xs mt-2 uppercase tracking-widest font-semibold opacity-70">
+            Desliza • Hover para reseña • Clic para voltear
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-300 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] py-8 relative z-30">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                
+                <!-- Referencias -->
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-3 border-b-2 border-slate-200 pb-1 inline-block">
+                        Referencias
+                    </h3>
+                    <ul class="text-xs text-slate-600 space-y-1.5 font-mono leading-relaxed">
+                        <li>Giddens, A. (1989). <i>Sociología</i>. Alianza Editorial.</li>
+                        <li>González Anleo, J. (1991). <i>Para comprender la Sociología</i>. Editorial Verbo Divino.</li>
+                        <li>Macionis, J. J. y Plummer, K. (2011). <i>Sociología</i> (4ª ed.). Pearson Educación.</li>
+                        <li>Marescalchi, M. et al. (2018). <i>Sociología: aspectos significativos de estudio del siglo XXI</i>. UniRío Editora.</li>
+                        <li>Rodríguez Rojas, A. (s.f.). <i>Fundamentos de sociología</i>. Ecoe Ediciones.</li>
+                        <li>Schaefer, R. T. (2012). <i>Sociología</i> (12ª ed.). McGraw-Hill.</li>
+                    </ul>
+                </div>
+
+                <!-- Autor -->
+                <div class="flex flex-col justify-center items-end text-right h-full">
+                    <div class="bg-indigo-50 p-6 rounded-2xl border border-indigo-100 shadow-lg transform transition hover:scale-105 duration-300">
+                        <p class="text-xs text-indigo-400 font-bold uppercase tracking-widest mb-2">Línea de tiempo elaborada por</p>
+                        <p class="text-2xl font-black text-slate-800 leading-none mb-1">Adriana González Ibarra</p>
+                        <div class="h-1 w-16 bg-indigo-500 ml-auto mb-2 rounded-full"></div>
+                        <p class="font-mono text-sm text-slate-500 font-medium">C.I. 15.756.922</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LOGICA -->
+    <script>
+        // --- CONFIGURACIÓN DE IMÁGENES ---
+
+        // Fondos
+        const bgGrecias = "https://www.cervantesvirtual.com/images/portales/antigua_historia_y_arqueologia/graf/grecia/imagen_parcial_de_la_acropolis_de_atenas.jpg";
+        const bgFrancia = "https://artistsrep.org/wp-content/uploads/2019/05/FrenchRevolution.jpg";
+        const bgIslam = "https://talkao.com/wp-content/uploads/2024/04/Taj-Mahal-Agra-India-1024x562.webp";
+        const bgRenacimiento = "https://www.muyinteresante.com/wp-content/uploads/sites/5/2024/07/30/66a8efbb144de.jpeg?w=550&h=309&crop=1";
+        // const bgAlemania = "https://upload.wikimedia.org/wikipedia/commons/e/e0/Heidelberg%2C_seen_from_the_Terrace%2C_Germany%2C_1890s.jpg"; (Ya no se usa genérico)
+        const bgKlemm = "https://www.brabbu.com/en/inspiration-and-ideas/wp-content/uploads/2017/04/Brandenburger_Tor_abends.jpg";
+        const bgUK = "https://crowdbaron.com/wp-content/uploads/2020/10/images1302-5f9c580300d14.jpg";
+        const bgGiddens = "https://media.istockphoto.com/id/499732346/photo/downtown-london-city-skyline-reflection-in-river-thames-at-night.jpg?s=612x612&w=0&k=20&c=8hwao3rwQe6JIcDuQPtcHr78J6sxpQvmJotQ1KO9ZdA=";
+        const bgUSA = "https://www.sporcle.com/blog/wp-content/uploads/2020/03/5-5.jpg";
+        
+        // Nuevos Fondos Solicitados
+        const bgMarx = "https://www.germansights.com/images/trier/trier-church.jpg";
+        const bgMeiners = "https://static.dw.com/image/4335553_7.jpg";
+        const bgWeber = "https://www.germansights.com/images/erfurt/erfurt_dom.jpg";
+        const bgWaitz = "https://cms.thuecat.org/o/adaptive-media/image/166712964/Preview-1280x0/image";
+
+        // Imágenes de Perfil (URLs actualizadas desde Wordpress)
+        const rawImages = {
+            platon: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/1.-platon-c.-427-347-a.-c.png?w=242",
+            aristoteles: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/2.-aristoteles-384-322-a.-c.png?w=201",
+            ibnJaldun: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/3.-ibn-jaldun-1332-1406.png?w=201",
+            maquiavelo: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/4.-nicolas-maquiavelo-1469-1527.png?w=234",
+            montesquieu: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/5.-montesquieu-1689-1755.png?w=201",
+            voltaire: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/6.-voltaire-1694-1778.png?w=224",
+            rousseau: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/7.-jean-jacques-rousseau-1712-1778.png?w=203",
+            meiners: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/8.-christoph-meiners-1747-1810.png?w=201",
+            saintSimon: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/9.-claude-henri-de-rouvroy-conde-de-saint-simon-1760-1825.png?w=210",
+            comte: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/10.-augusto-comte-1798-1857.png?w=200",
+            klemm: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/11.-gustav-klemm-1802-1867.png?w=198",
+            martineau: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/12.-harriet-martineau-1802-1876.png?w=197",
+            marx: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/13.-karl-marx-1818-1883.png?w=203",
+            spencer: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/14.-herbert-spencer-1820-1903.png?w=201",
+            waitz: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/15.-theodor-waitz-1821-1864.png?w=201",
+            durkheim: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/16.-emile-durkheim-1858-1917.png?w=201",
+            addams: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/17.-jane-addams-1860-1935.png?w=201",
+            mead: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/18.-george-herbert-mead-1863-1931.png?w=204",
+            weber: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/19.-max-weber-1864-1920.png?w=201",
+            dubois: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/20.-w.e.b.-du-bois-1868-1963.png?w=201",
+            parsons: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/21.-talcott-parsons-1902-1979.png?w=200",
+            merton: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/22.-robert-k.-merton-1910-2003.png?w=201",
+            mills: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/23.-c.-wright-mills-1916-1962.png?w=201",
+            goffman: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/24.-erving-goffman-1922-1982.png?w=201",
+            giddens: "https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/25.-anthony-giddens-1938-presente.png?w=201"
+        };
+
+        // Asignación de datos
+        const figures = [
+            { id: 1, name: "Platón", dates: "c. 427 - 347 a. C.", isSociologist: false, bgImg: bgGrecias, imgUrl: rawImages.platon, bio: "Filósofo griego que idealizó el Estado perfecto, buscando la justicia y la virtud más que el análisis empírico.", contributions: ["En La República, analizó la justicia como un equilibrio orgánico y planteó un modelo de sociedad estratificada (gobernantes, guerreros, productores) basado en la virtud.", "Defendió la educación estatal como mecanismo de control social y legitimación de la jerarquía, priorizando una visión idealista y estática del orden social sobre la observación empírica (Macionis y Plummer, 2011)."] },
+            { id: 2, name: "Aristóteles", dates: "384 - 322 a. C.", isSociologist: false, bgImg: bgGrecias, imgUrl: rawImages.aristoteles, bio: "Discípulo de Platón, definió al hombre como un 'animal político' que necesita de la polis para realizarse.", contributions: ["Definió al ser humano como un 'animal político' (zoon politikon) que solo alcanza su plenitud en sociedad, considerando a la familia como la célula social básica.", "A diferencia de su maestro, aplicó un método comparativo y realista al estudiar 158 constituciones griegas, analizando la relación entre la estructura social, la economía y las formas de gobierno (González Anleo, 1991)."] },
+            { id: 3, name: "Ibn Jaldún", dates: "1332 - 1406", isSociologist: false, bgImg: bgIslam, imgUrl: rawImages.ibnJaldun, bio: "Pensador musulmán pionero en el análisis de las civilizaciones y sus ciclos de auge y caída.", contributions: ["Fundó la 'ciencia de la organización social' (Ilm Al-Umran) siglos antes que Comte, analizando cómo factores materiales (clima, geografía) moldean el carácter de los pueblos.", "Desarrolló la teoría de la asabiyyah (cohesión social), explicando el ciclo histórico mediante el conflicto constante entre la solidaridad fuerte de los nómadas y la corrupción sedentaria de las civilizaciones urbanas. (Macionis y Plummer, 2011)."] },
+            { id: 4, name: "Nicolás Maquiavelo", dates: "1469 - 1527", isSociologist: false, bgImg: bgRenacimiento, imgUrl: rawImages.maquiavelo, bio: "Funcionario florentino que rompió con la moralidad religiosa para analizar el poder tal cual se ejerce.", contributions: ["Rompió con la tradición moralista al tratar la política como una ciencia técnica de lo posible, separando la ética del ejercicio del poder.", "En El Príncipe, analizó objetivamente el comportamiento de las masas y los líderes, describiendo las dinámicas de conflicto, liderazgo y manipulación necesarias para mantener el orden y la estabilidad del Estado (González Anleo, 1991)."] },
+            { id: 5, name: "Montesquieu", dates: "1689 - 1755", isSociologist: false, bgImg: bgFrancia, imgUrl: rawImages.montesquieu, bio: "Ilustrado francés interesado en descubrir las leyes naturales que rigen la historia y las instituciones.", contributions: ["En El espíritu de las leyes, intentó descubrir las leyes causales que rigen la historia, vinculando las instituciones políticas con factores físicos (clima, geografía) y sociales (costumbres, religión).", "Fue pionero en construir 'tipos ideales' de gobierno (república, monarquía, despotismo) basados en la estructura social subyacente, naturalizando el estudio de los fenómenos sociales (González Anleo, 1991)."] },
+            { id: 6, name: "Voltaire", dates: "1694 - 1778", isSociologist: false, bgImg: bgFrancia, imgUrl: rawImages.voltaire, bio: "Crítico de la Ilustración que rechazó la visión teológica de la historia a favor de la razón humana.", contributions: ["Fundó la Filosofía de la Historia al rechazar las explicaciones teológicas o divinas, proponiendo que el progreso social es fruto de la razón y la acción humana.", "Desplazó el foco de las crónicas reales hacia el estudio del 'espíritu de las naciones', analizando las costumbres, el comercio y la vida cotidiana como los verdaderos motores de la civilización (González Anleo, 1991)."] },
+            { id: 7, name: "Jean-Jacques Rousseau", dates: "1712 - 1778", isSociologist: false, bgImg: bgFrancia, imgUrl: rawImages.rousseau, bio: "Pensador radical que influyó en la Revolución Francesa con sus ideas sobre la libertad y la igualdad.", contributions: ["Desarrolló la noción del 'contrato social' como base de la legitimidad política, argumentando que la sociedad civil y la propiedad privada son el origen de la desigualdad humana.", "Su idea de que el entorno social corrompe la bondad natural del hombre sentó las bases para la sociología crítica, al sugerir que las estructuras sociales pueden y deben ser transformadas (Marescalchi et al., 2018)."] },
+            { id: 8, name: "Christoph Meiners", dates: "1747 - 1810", isSociologist: false, bgImg: bgMeiners, imgUrl: rawImages.meiners, bio: "Profesor de Gotinga, pionero en la sistematización de datos etnográficos comparados.", contributions: ["Como representante de la 'Etnografía descriptiva', impulsó la Historia de la Cultura recopilando masivamente datos sobre leyes, costumbres y religiones de diversos pueblos.", "Su trabajo aportó el material empírico crudo y la sistematización descriptiva necesaria para que la sociología posterior pudiera abandonar la especulación pura y formular teorías basadas en hechos comparados (González Anleo, 1991)."] },
+            { id: 9, name: "Henri de Saint-Simon", dates: "1760 - 1825", isSociologist: false, bgImg: bgFrancia, imgUrl: rawImages.saintSimon, bio: "Aristócrata visionario que propuso reorganizar la sociedad mediante la ciencia y la industria.", contributions: ["Considerado el 'padre espiritual' de la sociología, propuso una 'fisiología social' para estudiar el organismo social con la misma exactitud que las ciencias naturales.", "Anticipó el conflicto de clases entre 'productores' (industriales, obreros) y 'ociosos' (nobleza), abogando por una sociedad tecnocrática planificada científicamente para lograr el progreso industrial (Macionis y Plummer, 2011)."] },
+            { id: 10, name: "Augusto Comte", dates: "1798 - 1857", isSociologist: true, bgImg: bgFrancia, imgUrl: rawImages.comte, bio: "Creador del positivismo, buscó leyes invariables para sanar el caos social post-revolucionario.", contributions: ["Acuñó el término 'sociología' en 1838 para designar a la ciencia reina que utilizaría el método científico (positivismo) para estudiar la sociedad.", "Formuló la 'Ley de los Tres Estadios' (teológico, metafísico y positivo) y dividió la disciplina en Estática Social (orden y estabilidad) y Dinámica Social (progreso y cambio), buscando remediar el caos post-revolucionario (Schaefer, 2012)."] },
+            { id: 11, name: "Gustav Klemm", dates: "1802 - 1867", isSociologist: false, bgImg: bgKlemm, imgUrl: rawImages.klemm, bio: "Bibliotecario alemán que dedicó su vida a clasificar la cultura humana en etapas evolutivas.", contributions: ["Realizó un esfuerzo monumental por clasificar la cultura humana en etapas evolutivas universales (salvajismo, domesticación, libertad), basándose en la acumulación tecnológica y cultural.", "Su enfoque sistemático sobre la evolución de las herramientas, armas y costumbres proveyó un marco comparativo esencial para el desarrollo posterior del evolucionismo social y la antropología (González Anleo, 1991)."] },
+            { id: 12, name: "Harriet Martineau", dates: "1802 - 1876", isSociologist: true, bgImg: bgUK, imgUrl: rawImages.martineau, bio: "Periodista y activista inglesa que introdujo a Comte en el mundo anglosajón y defendió a la mujer.", contributions: ["No solo tradujo y condensó la obra de Comte facilitando su difusión, sino que escribió Cómo observar la moral y las costumbres, el primer tratado de metodología sociológica.", "Fue pionera en el análisis feminista y sociológico al examinar empíricamente las clases sociales, el suicidio, las relaciones raciales y el estatus doméstico de la mujer en Estados Unidos y Gran Bretaña (Schaefer, 2012)."] },
+            { id: 13, name: "Karl Marx", dates: "1818 - 1883", isSociologist: true, bgImg: bgMarx, imgUrl: rawImages.marx, bio: "Crítico del capitalismo, vivió exiliado analizando la explotación y la lucha obrera.", contributions: ["Desarrolló el materialismo histórico, planteando que la estructura económica (modos de producción) determina la superestructura social, política y cultural.", "Fundó la sociología del conflicto al identificar la lucha de clases (burguesía vs. proletariado) como el motor de la historia, introduciendo conceptos clave como plusvalía, alienación y falsa conciencia (Macionis y Plummer, 2011)."] },
+            { id: 14, name: "Herbert Spencer", dates: "1820 - 1903", isSociologist: true, bgImg: bgUK, imgUrl: rawImages.spencer, bio: "Intelectual victoriano que aplicó la biología a la sociedad; no creía en la reforma social estatal.", contributions: ["Popularizó la analogía orgánica, comparando la sociedad con un cuerpo biológico donde las instituciones funcionan como órganos interdependientes.", "Aplicó conceptos evolutivos antes que Darwin, acuñando la 'supervivencia del más apto' (darwinismo social) para justificar la no intervención del Estado en los problemas sociales y defender el orden natural de la competencia (Schaefer, 2012)."] },
+            { id: 15, name: "Theodor Waitz", dates: "1821 - 1864", isSociologist: false, bgImg: bgWaitz, imgUrl: rawImages.waitz, bio: "Académico que intentó comprender la psicología de los pueblos 'primitivos' sin prejuicios extremos.", contributions: ["Consolidó la 'sociología descriptiva' al insistir en la recolección rigurosa de datos etnográficos antes de formular generalizaciones teóricas.", "Abordó la psicología de los pueblos primitivos intentando superar los prejuicios racistas de la época, argumentando que las diferencias culturales se debían más a la historia y el entorno social que a capacidades biológicas innatas (González Anleo, 1991)."] },
+            { id: 16, name: "Émile Durkheim", dates: "1858 - 1917", isSociologist: true, bgImg: bgFrancia, imgUrl: rawImages.durkheim, bio: "Académico francés que institucionalizó la sociología y se obsesionó con la cohesión social.", contributions: ["Logró la autonomía académica de la sociología definiendo su objeto de estudio: los 'hechos sociales' (formas de actuar, pensar y sentir externas al individuo).", "En su obra El Suicidio, demostró cómo un acto íntimo está determinado por la integración social, y diferenció entre solidaridad mecánica (sociedades tradicionales) y orgánica (modernas), alertando sobre la 'anomia' (Schaefer, 2012)."] },
+            { id: 17, name: "Jane Addams", dates: "1860 - 1935", isSociologist: true, bgImg: bgUSA, imgUrl: rawImages.addams, bio: "Activista y premio Nobel, fundó Hull House para asistir a inmigrantes en Chicago.", contributions: ["Cofundadora de Hull House, fusionó la teoría sociológica con el activismo político y el trabajo social directo, creando la metodología de la 'sociología aplicada'.", "Trabajó con la Escuela de Chicago mapeando problemas urbanos, investigando las causas de la pobreza y la delincuencia juvenil, y abogando por leyes laborales y derechos para inmigrantes y mujeres (Schaefer, 2012)."] },
+            { id: 18, name: "George Herbert Mead", dates: "1863 - 1931", isSociologist: true, bgImg: bgUSA, imgUrl: rawImages.mead, bio: "Filósofo de la Escuela de Chicago, centrado en la micro-sociología y la comunicación.", contributions: ["Padre del Interaccionismo Simbólico, centró su análisis en el nivel micro-sociológico: cómo las personas construyen la realidad a través de la comunicación y los símbolos.", "Explicó la génesis social del 'Self' (sí mismo) a través del juego y la asunción de roles, argumentando que la mente individual surge solo mediante la interacción social (Macionis y Plummer, 2011)."] },
+            { id: 19, name: "Max Weber", dates: "1864 - 1920", isSociologist: true, bgImg: bgWeber, imgUrl: rawImages.weber, bio: "Erudito alemán interesado en la racionalización, la burocracia y la religión.", contributions: ["Complementó el enfoque estructural con la 'sociología comprensiva' (Verstehen), buscando entender los significados subjetivos que los actores dan a sus acciones.", "Desarrolló la herramienta conceptual de los 'tipos ideales', analizó la burocracia como la forma suprema de racionalización moderna y vinculó la ética religiosa calvinista con el nacimiento del espíritu capitalista (Giddens, 1989)."] },
+            { id: 20, name: "W.E.B. Du Bois", dates: "1868 - 1963", isSociologist: true, bgImg: bgUSA, imgUrl: rawImages.dubois, bio: "Primer doctor afroamericano en Harvard, luchador incansable por los derechos civiles.", contributions: ["Combinó investigación empírica rigurosa y teoría crítica para estudiar la raza, siendo pionero con obras como The Philadelphia Negro.", "Acuñó el concepto de 'doble conciencia' para describir la experiencia psicológica de los afroamericanos de verse a sí mismos a través de los ojos de una sociedad racista, y señaló la 'línea de color' como el problema central del siglo XX (Schaefer, 2012)."] },
+            { id: 21, name: "Talcott Parsons", dates: "1902 - 1979", isSociologist: true, bgImg: bgUSA, imgUrl: rawImages.parsons, bio: "Estadounidense de Harvard, dominó la sociología de mediados de siglo XX con su teoría de sistemas.", contributions: ["Sistematizó el 'Funcionalismo Estructural', concibiendo a la sociedad como un sistema complejo que tiende al equilibrio y la auto-mantenimiento.", "Desarrolló el esquema AGIL (Adaptación, Metas, Integración, Latencia) para explicar los requisitos funcionales de todo sistema social y analizó cómo instituciones como la familia socializan a los individuos para cumplir roles específicos (Macionis y Plummer, 2011)."] },
+            { id: 22, name: "Robert K. Merton", dates: "1910 - 2003", isSociologist: true, bgImg: bgUSA, imgUrl: rawImages.merton, bio: "Profesor de Columbia que buscó unir teoría abstracta con investigación empírica.", contributions: ["Refinó el funcionalismo introduciendo las 'teorías de alcance medio' para conectar la abstracción con la investigación empírica.", "Distinguió entre funciones manifiestas (intencionales), latentes (ocultas) y disfunciones, y desarrolló la célebre 'teoría de la anomia' (o tensión estructural) para explicar cómo la discrepancia entre metas culturales y medios legítimos genera desviación. (Schaefer, 2012)."] },
+            { id: 23, name: "C. Wright Mills", dates: "1916 - 1962", isSociologist: true, bgImg: bgUSA, imgUrl: rawImages.mills, bio: "Crítico social estadounidense, advirtió sobre el poder de las élites militares e industriales.", contributions: ["Desafió el conformismo académico con el concepto de la 'Imaginación Sociológica', instando a conectar las inquietudes personales (biografía) con los problemas públicos (historia y estructura).", "Analizó críticamente la estructura de poder en EE.UU., denunciando la existencia de una 'élite del poder' integrada por líderes militares, corporativos y políticos que dominan la sociedad democrática. (Macionis y Plummer, 2011)."] },
+            { id: 24, name: "Erving Goffman", dates: "1922 - 1982", isSociologist: true, bgImg: bgUSA, imgUrl: rawImages.goffman, bio: "Canadiense-estadounidense conocido por su enfoque en la interacción cara a cara.", contributions: ["Revolucionó la microsociología con el 'enfoque dramatúrgico', analizando la vida social como una representación teatral donde los individuos actúan para gestionar las impresiones de los demás.", "Estudió las 'instituciones totales' (manicomios, prisiones) y desarrolló conceptos como el estigma y los rituales de interacción cotidiana que sostienen el orden social (Schaefer, 2012)."] },
+            { id: 25, name: "Anthony Giddens", dates: "1938 - Presente", isSociologist: true, bgImg: bgGiddens, imgUrl: rawImages.giddens, bio: "Sociólogo británico, ex director de la LSE y asesor político.", contributions: ["Desarrolló la 'Teoría de la Estructuración', superando la dicotomía entre estructura y acción al plantear que ambas se constituyen mutuamente (dualidad de la estructura).", "Es un analista clave de la 'modernidad tardía', la reflexividad social y los impactos de la globalización en la identidad íntima y las relaciones de confianza (Giddens, 1989)."] }
+        ];
+
+        const wrapper = document.getElementById('cards-wrapper');
+        
+        // --- Parámetros de Diseño ---
+        const cardWidth = 320; // 320px = w-80
+        const overlap = cardWidth / 2; // Acercar mitad del ancho (160px)
+        const initialSpacing = 400; // Espaciado anterior
+        const step = initialSpacing - overlap; // Nuevo espaciado (240px)
+
+        figures.forEach((fig, index) => {
+            const isTop = index % 2 === 0;
+            const mainColor = fig.isSociologist ? "indigo" : "amber";
+            
+            const borderClass = `border-${mainColor}-300`;
+            const textClass = `text-${mainColor}-800`;
+            const accentClass = `bg-${mainColor}-800`;
+            const lightBgClass = `bg-${mainColor}-50`;
+            const ringClass = `ring-${mainColor}-300`;
+
+            const typeLabel = fig.isSociologist ? "Sociólogo" : "Precursor";
+
+            // Posición vertical (Ajustado para acercar láminas)
+            // Antes: top-4 / bottom-4. Ahora: top-12 / bottom-12 (más cerca del centro si el contenedor es alto)
+            // Con height 1100px:
+            // Centro ~ 550px.
+            // Tarjeta ~ 480px.
+            // Top: top-12 (48px) -> bottom edge @ 528px. (Casi toca el centro)
+            // Bottom: bottom-12 (48px) -> top edge @ 1100-48-480 = 572px. (Casi toca el centro)
+            const positionClass = isTop ? "top-12" : "bottom-12";
+            
+            // Conector Vertical: 
+            // Si Top: Bottom edge 528px. Linea hasta 550px. Longitud = 22px + gap.
+            // Si Bottom: Top edge 572px. Linea desde 550px. Longitud = 22px + gap.
+            // Ajustamos altura del conector para que cruce visualmente.
+            const connectorHTML = isTop 
+                ? `<div class="absolute left-1/2 -translate-x-1/2 w-2 bg-slate-400 opacity-80 h-[80px] -bottom-[80px]"></div>
+                   <div class="absolute left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-slate-600 border-4 border-white connector-dot -bottom-[90px] z-20"></div>`
+                : `<div class="absolute left-1/2 -translate-x-1/2 w-2 bg-slate-400 opacity-80 h-[80px] -top-[80px]"></div>
+                   <div class="absolute left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-slate-600 border-4 border-white connector-dot -top-[90px] z-20"></div>`;
+
+            // Imagen - Usar directamente la URL
+            const imgSrc = fig.imgUrl;
+            
+            // Condicional para alineación de imagen: Platón (id 1) se queda como está, el resto object-top
+            const imgAlignClass = (fig.id === 1) ? "object-cover" : "object-cover object-top";
+
+            const cardHTML = `
+                <div class="absolute ${positionClass} w-80 h-[480px] perspective-1000 z-20 group" style="left: ${index * step}px">
+                    
+                    ${connectorHTML}
+
+                    <!-- Inner -->
+                    <div class="card-inner relative w-full h-full preserve-3d cursor-pointer shadow-[0_20px_50px_-12px_rgba(0,0,0,0.6)] rounded-3xl" onclick="toggleFlip(this)">
+                        
+                        <!-- FRONTAL -->
+                        <div class="absolute w-full h-full backface-hidden rounded-3xl overflow-hidden bg-white border border-slate-200 flex flex-col">
+                            
+                            <!-- Cabecera -->
+                            <div class="h-44 relative bg-cover bg-center" style="background-image: url('${fig.bgImg}');">
+                                <div class="absolute inset-0 bg-black/30"></div>
+                                <div class="w-40 h-40 rounded-full border-4 border-white shadow-2xl bg-white absolute -bottom-20 left-1/2 -translate-x-1/2 overflow-hidden ring-4 ${ringClass} z-10">
+                                    <img src="${imgSrc}" alt="${fig.name}" class="w-full h-full ${imgAlignClass}">
+                                </div>
+                            </div>
+
+                            <!-- Texto -->
+                            <div class="pt-24 px-4 pb-6 text-center flex-1 flex flex-col items-center justify-start mt-2">
+                                <h3 class="text-3xl font-extrabold text-slate-800 leading-none mb-2 tracking-tight">${fig.name}</h3>
+                                <span class="text-base font-bold text-slate-500 uppercase tracking-widest mb-3 block">${fig.dates}</span>
+                                <span class="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide bg-slate-100 ${textClass} mb-4 shadow-sm border border-slate-200">${typeLabel}</span>
+                                
+                                <div class="w-full mt-auto transition-all duration-500 max-h-0 opacity-0 group-hover:max-h-40 group-hover:opacity-100 overflow-hidden">
+                                    <p class="text-sm text-slate-700 leading-snug bg-slate-50 p-4 rounded-xl border border-slate-100 text-left shadow-inner font-medium">
+                                        ${fig.bio}
+                                    </p>
+                                </div>
+                                <div class="mt-2 text-slate-300 group-hover:opacity-0 transition-opacity">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TRASERA -->
+                        <div class="absolute w-full h-full backface-hidden rounded-3xl overflow-hidden ${lightBgClass} border-2 ${borderClass} flex flex-col rotate-y-180 shadow-inner">
+                            <div class="${accentClass} p-5 flex items-center justify-center text-white shadow-md flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                                <h4 class="font-bold text-lg tracking-wide">Contribuciones Principales</h4>
+                            </div>
+                            <div class="p-6 flex-1 overflow-y-auto card-scroll">
+                                <ul class="text-[13px] text-slate-800 space-y-3 text-left list-disc pl-4 font-medium leading-normal">
+                                    ${fig.contributions.map(c => `<li>${c}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div class="pb-4 pt-2 text-center text-xs text-slate-400 font-bold uppercase tracking-widest flex-shrink-0">
+                                Clic para volver
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            `;
+            wrapper.innerHTML += cardHTML;
+        });
+
+        // Ajuste dinámico del ancho total del contenedor
+        wrapper.style.width = `${(figures.length * step) + 400}px`;
+
+        function scrollTimeline(direction) {
+            const container = document.getElementById('timeline-container');
+            const amount = 800;
+            if (direction === 'left') {
+                container.scrollBy({ left: -amount, behavior: 'smooth' });
+            } else {
+                container.scrollBy({ left: amount, behavior: 'smooth' });
+            }
+        }
+
+        function toggleFlip(element) {
+            element.classList.toggle('rotate-y-180');
+        }
+    </script>
+</body>
+</html>
