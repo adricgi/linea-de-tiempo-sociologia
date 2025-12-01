@@ -11,15 +11,20 @@
         .backface-hidden { backface-visibility: hidden; }
         .rotate-y-180 { transform: rotateY(180deg); }
         
-        /* Scrollbar oculta */
+        /* Ocultar scrollbar predeterminada pero permitir scroll */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        .card-inner { transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        /* SUAVIZADO DE ANIMACIONES (Hardware Acceleration) */
+        .card-inner { 
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+            will-change: transform;
+        }
+        
         .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
         .connector-dot { box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8); }
 
-        /* Scroll interno tarjeta */
+        /* Scroll personalizado dentro de tarjetas */
         .card-scroll::-webkit-scrollbar { width: 4px; }
         .card-scroll::-webkit-scrollbar-track { background: transparent; }
         .card-scroll::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.5); border-radius: 20px; }
@@ -28,34 +33,53 @@
         #timeline-scaler {
             transform-origin: top left;
             transition: transform 0.3s ease-out, width 0.3s ease-out;
+            will-change: transform, width;
         }
 
-        /* --- LÓGICA DE HOVER INTELIGENTE --- */
+        /* --- LÓGICA DE HOVER INTELIGENTE + GPU --- */
         .card-smart {
-            /* Transición suave y sincronizada */
-            transition: transform 0.3s ease-out, z-index 0s;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0s;
+            will-change: transform;
+            transform: translateZ(0); 
         }
 
-        /* Tarjetas Superiores: Se mueven menos (-25px) para no pegar la sombra al borde */
-        .card-top {
-            transform-origin: top center;
-        }
+        /* Tarjetas Superiores */
+        .card-top { transform-origin: top center; }
         .card-top:hover {
             z-index: 100;
-            transform: translateY(-25px) scale(var(--card-hover-scale, 1));
+            transform: translateY(-25px) scale(var(--card-hover-scale, 1)) translateZ(0);
         }
 
-        /* Tarjetas Inferiores: Se mueven menos (25px) para no pegar la sombra al borde */
-        .card-bottom {
-            transform-origin: bottom center;
-        }
+        /* Tarjetas Inferiores */
+        .card-bottom { transform-origin: bottom center; }
         .card-bottom:hover {
             z-index: 100;
-            transform: translateY(25px) scale(var(--card-hover-scale, 1));
+            transform: translateY(25px) scale(var(--card-hover-scale, 1)) translateZ(0);
+        }
+
+        /* --- FONDO PARALLAX --- */
+        #parallax-bg {
+            position: fixed;
+            top: -10%;
+            left: 0;
+            width: 150vw; 
+            height: 120vh;
+            background-image: url('https://adrianagonzalez9.wordpress.com/wp-content/uploads/2025/11/gemini_generated_image_rlthdsrlthdsrlth.png?w=1200');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+            transition: transform 0.1s linear;
         }
     </style>
 </head>
 <body class="bg-slate-100 font-sans text-slate-800 flex flex-col min-h-screen overflow-x-hidden">
+
+    <!-- FONDO PARALLAX -->
+    <div id="parallax-bg"></div>
 
     <!-- HEADER -->
     <header class="bg-slate-900 text-white py-4 shadow-2xl sticky top-0 z-50 border-b border-slate-700 flex-shrink-0">
@@ -69,22 +93,23 @@
         </div>
     </header>
 
-    <!-- MAIN -->
-    <main class="flex-1 relative w-full bg-slate-200 flex flex-col justify-center">
+    <!-- MAIN (Opacidad ajustada a 200/25) -->
+    <main class="flex-1 relative w-full flex flex-col justify-center bg-slate-200/25"> 
         
-        <!-- Botones de Navegación -->
-        <button onclick="scrollTimeline('left')" class="absolute left-4 z-40 bg-white hover:bg-indigo-50 p-3 rounded-full shadow-2xl text-slate-800 transition-all hover:scale-110 border border-slate-300 cursor-pointer group top-1/2 -translate-y-1/2">
+        <!-- Botón Izquierda (Restaurado y asegurado con z-50) -->
+        <button onclick="scrollTimeline('left')" class="absolute left-4 z-50 bg-white/90 hover:bg-white p-3 rounded-full shadow-2xl text-slate-800 transition-all hover:scale-110 border border-slate-300 cursor-pointer group top-1/2 -translate-y-1/2 backdrop-blur-sm">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-indigo-600"><path d="m15 18-6-6 6-6"/></svg>
         </button>
 
-        <button onclick="scrollTimeline('right')" class="absolute right-4 z-40 bg-white hover:bg-indigo-50 p-3 rounded-full shadow-2xl text-slate-800 transition-all hover:scale-110 border border-slate-300 cursor-pointer group top-1/2 -translate-y-1/2">
+        <!-- Botón Derecha -->
+        <button onclick="scrollTimeline('right')" class="absolute right-4 z-50 bg-white/90 hover:bg-white p-3 rounded-full shadow-2xl text-slate-800 transition-all hover:scale-110 border border-slate-300 cursor-pointer group top-1/2 -translate-y-1/2 backdrop-blur-sm">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-indigo-600"><path d="m9 18 6-6-6-6"/></svg>
         </button>
 
         <!-- Wrapper Escalable -->
-        <div id="timeline-wrapper" class="w-full relative overflow-hidden transition-all duration-300 ease-out">
+        <div id="timeline-wrapper" class="w-full relative overflow-hidden transition-all duration-300 ease-out z-10">
             <div id="timeline-scaler" class="w-full">
-                <!-- Área Scrollable (Altura fija interna 1000px) -->
+                <!-- Área Scrollable -->
                 <div id="timeline-container" class="overflow-x-auto hide-scrollbar px-24 flex items-center h-[1000px] relative scroll-smooth">
                     <!-- Cards Wrapper -->
                     <div id="cards-wrapper" class="flex min-w-max relative z-10 pl-10 pr-10 h-full items-center">
@@ -94,13 +119,13 @@
             </div>
         </div>
 
-        <div class="text-center text-slate-500 text-[10px] uppercase tracking-widest font-semibold opacity-70 py-2">
+        <div class="text-center text-slate-600 text-[10px] uppercase tracking-widest font-bold opacity-80 py-2 relative z-20">
             Desliza • Hover para reseña • Clic para voltear
         </div>
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-white border-t border-slate-300 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] py-4 relative z-50 flex-shrink-0">
+    <footer class="bg-white/95 border-t border-slate-300 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] py-4 relative z-50 flex-shrink-0 backdrop-blur-md">
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                 <!-- Referencias -->
@@ -119,7 +144,6 @@
                 <div class="flex flex-col justify-center items-end text-right h-full">
                     <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100 shadow-md transform transition hover:scale-105 duration-300">
                         <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-widest mb-1">Línea de tiempo elaborada por</p>
-                        <!-- Cambio de fuente y peso para el nombre -->
                         <p class="text-xl font-serif font-medium text-slate-700 leading-none mb-1 tracking-wide">Adriana Gonzalez Ibarra</p>
                         <div class="h-1 w-12 bg-indigo-500 ml-auto mb-1 rounded-full"></div>
                         <p class="font-mono text-xs text-slate-500 font-medium">C.I. 15.756.922</p>
@@ -205,6 +229,7 @@
         const wrapper = document.getElementById('cards-wrapper');
         const scaler = document.getElementById('timeline-scaler');
         const timelineWrapper = document.getElementById('timeline-wrapper');
+        const bg = document.getElementById('parallax-bg');
         
         // --- Parámetros de Diseño ---
         const cardWidth = 320; 
@@ -357,6 +382,24 @@
                 scaler.style.width = `${100 / scale}%`;
                 timelineWrapper.style.height = `${contentBaseHeight * scale}px`;
             }
+        }
+
+        // --- LOGICA DE PARALLAX HORIZONTAL ---
+        // Escuchamos el scroll del contenedor para mover el fondo
+        const container = document.getElementById('timeline-container');
+        if (container && bg) {
+            container.addEventListener('scroll', () => {
+                // Cálculo de porcentaje de scroll
+                const maxScrollLeft = container.scrollWidth - container.clientWidth;
+                const scrollPercentage = container.scrollLeft / maxScrollLeft;
+                
+                // Ancho del fondo es 150vw. Ancho visible 100vw.
+                // Puede moverse hasta -50vw
+                const moveAmount = -50 * scrollPercentage; 
+                
+                // Aplicamos la transformación. Usamos translate3d para hardware acceleration.
+                bg.style.transform = `translate3d(${moveAmount}vw, 0, 0)`;
+            });
         }
 
         window.addEventListener('load', adjustZoom);
